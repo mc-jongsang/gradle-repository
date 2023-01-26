@@ -1,0 +1,42 @@
+plugins {
+    id 'maven-publish'
+    id 'java'
+}
+
+group = 'com.mco'
+version = '1.0.0'
+project.ext.set("nexusBaseUrl", "http://pkg.mtar.co.kr/repository")
+project.ext.set("nexusId", "admin")
+project.ext.set("nexusPasswd", "P@ssw0rd2022!")
+
+repositories {
+    mavenLocal()    // maven local cache repository
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs "deploy"
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url "$nexusBaseUrl/maven-releases/"
+            allowInsecureProtocol = true
+            credentials {
+                username = "$nexusId"
+                password = "$nexusPasswd"
+            }
+
+        }
+    }
+}
